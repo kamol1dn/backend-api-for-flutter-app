@@ -3,17 +3,22 @@ version: '3.8'
 services:
   db:
     image: postgres:15
+    container_name: weather_backend_db
     environment:
       POSTGRES_DB: weather_db
       POSTGRES_USER: weather_user
       POSTGRES_PASSWORD: weather_pass
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5570:5432"  # host_port:container_port (avoids 5432 conflicts)
+    restart: unless-stopped
 
   api:
     build: .
+    container_name: weather_backend_api
     ports:
-      - "8000:8000"
+      - "8100:8000"  # avoids 8000 conflict
     environment:
       - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
       - DATABASE_URL=postgresql://weather_user:weather_pass@db:5432/weather_db
@@ -23,11 +28,13 @@ services:
     depends_on:
       - db
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    restart: unless-stopped
 
   admin:
     build: .
+    container_name: weather_backend_admin
     ports:
-      - "5000:5000"
+      - "5100:5000"  # avoids 5000 conflict
     environment:
       - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
       - DATABASE_URL=postgresql://weather_user:weather_pass@db:5432/weather_db
@@ -35,6 +42,7 @@ services:
     depends_on:
       - db
     command: python -m app.admin_panel
+    restart: unless-stopped
 
 volumes:
   postgres_data:
