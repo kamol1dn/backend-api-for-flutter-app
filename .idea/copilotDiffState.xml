@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CopilotDiffPersistence">
+    <option name="pendingDiffs">
+      <map>
+        <entry key="$PROJECT_DIR$/tests/test_database.py">
+          <value>
+            <PendingDiffInfo>
+              <option name="filePath" value="$PROJECT_DIR$/tests/test_database.py" />
+              <option name="updatedContent" value="import pytest&#10;from datetime import datetime, timezone, timedelta&#10;&#10;from app.database import WeatherCache&#10;&#10;&#10;def test_needs_fetch_when_no_fetch_time():&#10;    wc = WeatherCache()&#10;    wc.fetch_1_time = None&#10;    assert wc.needs_fetch() is True&#10;&#10;&#10;def test_needs_fetch_when_old():&#10;    wc = WeatherCache()&#10;    # Set fetch time to 2 hours ago&#10;    wc.fetch_1_time = datetime.now(timezone.utc) - timedelta(hours=2)&#10;    assert wc.needs_fetch() is True&#10;&#10;&#10;def test_needs_fetch_when_current_hour():&#10;    wc = WeatherCache()&#10;    # Set fetch time to current rounded hour&#10;    now = datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0)&#10;    wc.fetch_1_time = now&#10;    assert wc.needs_fetch() is False&#10;" />
+            </PendingDiffInfo>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
